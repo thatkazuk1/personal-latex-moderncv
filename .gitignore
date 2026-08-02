@@ -3,11 +3,25 @@
 *.zip
 *.docx
 *.gz
+.codex
 main.aux
 main.fdb_latexmk
 main.synctex.gz
 main.synctex(busy)
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+_build_platform.tex
+_build_fullstack.tex
+main-base.tex
+main-diff.tex
+build/
 package.json
 
+.claude
+_adrs/
 roddy_cv/
 wilson_cv/

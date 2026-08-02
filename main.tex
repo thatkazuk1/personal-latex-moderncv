@@ -11,23 +11,54 @@
 \usepackage{pdfpages}
 \usepackage{xpatch}
 
+% ---- Variant flags ----
+% Set exactly one to true. Default: backend.
+% Override at build time: pdflatex "\def\variantplatform{}\input{main.tex}"
+\newif\ifbackend
+\newif\ifplatform
+\newif\iffullstack
+
+% Default variant
+\backendtrue
+
+% Allow CLI override
+\ifdefined\variantplatform
+  \backendfalse\platformtrue
+\fi
+\ifdefined\variantfullstack
+  \backendfalse\fullstacktrue
+\fi
+
 \recomputelengths
-\setlength{\hintscolumnwidth}{2cm}            % Width of the timeline on your left
-\tlmaxdates{2018}{2030}                       % Beginning and start of your timeline
+\setlength{\hintscolumnwidth}{1cm}            % Width of the timeline on your left
+\tlmaxdates{2018}{2027}                       % Beginning and start of your timeline
 
 %  //////////////////////////////////////////////////////////////////////
 %  ------------------------ Personal Information ------------------------
 %  //////////////////////////////////////////////////////////////////////
 
 \name{Desmond}{Edem}
-\title{Backend Engineer}
-\address{42 Cole Street}{Surulere, Lagos}
+\title{Senior Backend Engineer}
+\address{Lagos, Nigeria}{}
 \phone[mobile]{+234~(806)~749~0432}
 \social[linkedin]{desmondedem}
-\social[github]{meetkazuki}
-\email{meetdesmond.edem@gmail.com}
-\extrainfo{https://meetkazuki.github.io}
-\quote{Learn. Improve. Contribute\ldots}
+\social[github]{thatkazuk1}
+\email{tech@kazuki.uk}
+\homepage{kazuki.uk}
+
+% Profile summary, rendered via moderncv's header \quote{} mechanism
+% (centered, accent-colored, slanted, under the title block) instead of a
+% body section, so it visually reads as a header statement rather than
+% another indented list item.
+\ifbackend
+\quote{Backend engineer with 6+ years building APIs, database systems, and deployment pipelines in Node.js and TypeScript — from startup MVPs at STRV to platform services at the African Institute for AI.}
+\fi
+\ifplatform
+\quote{Backend and platform engineer with 6+ years in Node.js/TypeScript and hands-on infrastructure experience across STRV and the African Institute for AI, running a self-hosted homelab on Proxmox, Kubernetes, and Docker.}
+\fi
+\iffullstack
+\quote{Software engineer with 6+ years of full-stack experience in Node.js and TypeScript — from startup MVPs at STRV to platform services and internal tooling at the African Institute for AI.}
+\fi
 
 \begin{document}
 
@@ -39,67 +70,57 @@
 
 \section{Work Experience}
 
-\tlcventry{2025}{0}{Lead Backend Engineer (Volunteer)}{African Institute for AI LBG}{Accra, Ghana}{}{
+\tlcventry{2025}{0}{Lead Backend Engineer}{African Institute for AI LBG}{Accra, Ghana}{}{
   \begin{itemize}
-    \item Leading the development of a scalable backend architecture for an AI-driven platform, focusing on performance and reliability.
-    \item Implementing best practices in API design and database management to support high traffic and data-intensive applications.
-    \item Collaborating with cross-functional teams to integrate AI models and ensure seamless deployment of machine learning solutions.
+    \item Architected and built the NestJS backend for an offline-capable literacy platform, including REST API endpoints, PostgreSQL schema design, and environment configuration for deployment in restricted local infrastructure (Proxmox LXC containers).
+    \item Integrated request-level telemetry (Monoscope SDK) into the backend to enable operational logging in environments without external cloud monitoring agents.
+    \item Built a multi-page Retool admin portal with custom JWT-based authentication and page-level authorization, connecting UI components to backend verification endpoints rather than relying on Retool's built-in auth.
+    \item Codified the platform infrastructure on Azure using Terraform, ensuring reproducible environments and reducing deployment drift between development and production.
+    \item Set up Docker Compose orchestration and environment variable management for local and production container deployments.
   \end{itemize}
 }
 
 \medskip
 
-\cvline{}{Tools: \textit{TypeScript, Node.js, PostgreSQL, Redis, Terraform, Azure, Docker, Retool.}}
+\cvline{}{Tools: \textit{TypeScript, Node.js, NestJS, PostgreSQL, Redis, Docker, Retool, Proxmox, Terraform, Azure.}}
 
-\tlcventry{2021}{2024}{Backend Engineer}{STRV s.r.o}{Prague, Czech}{}{
+\tlcventry{2021}{2024}{Senior Backend Engineer}{STRV s.r.o}{Prague, Czech Republic}{}{
   \begin{itemize}
-    \item Led technical discovery and architecture design for 6+ MVP projects, translating client visions into scalable solutions with average time-to-market of 8 months.
-    \item Designed and implemented cost-effective backend infrastructures for US-based startups, reducing initial cloud costs by up to 40\% while maintaining scalability.
-    \item Architected database schemas and API structures that enabled seamless scaling from MVP to production, supporting 5x user growth without major refactoring.
+    \item Led technical discovery and architecture design for 6+ MVP projects, translating startup requirements into production-ready backend systems with an average time-to-market of 8 months.
+    \item Designed cost-effective cloud infrastructure for US-based startups on AWS and Heroku, reducing initial hosting costs by up to 40\% while maintaining headroom for growth.
+    \item Architected database schemas and REST API structures that supported 5x user growth without major refactoring.
     \item Progressed from collaborative development to independently leading technical discussions with clients and defining solution architectures.
-    \item Established coding standards and review processes that reduced technical debt by 50\% and improved maintainability across client projects.
+    \item Introduced linting standards, automated test suites, and structured PR review processes that reduced bug recurrence and improved codebase maintainability across client projects.
   \end{itemize}
 }
 
 \medskip
 
-\cvline{}{Tools: \textit{TypeScript, Node.js, PostgreSQL, MongoDB, Redis, AWS Elastic Beanstalk, Heroku.}}
+\cvline{}{Tools: \textit{TypeScript, Node.js, Express, PostgreSQL, MongoDB, Redis, AWS (Elastic Beanstalk, S3, RDS), Heroku.}}
 
-\medskip
-
-\tlcventry{2020}{2021}{Backend Developer}{Pettysave Limited}{Lagos State, Nigeria}{}{
+\tlcventry{2020}{2021}{Backend Developer}{Pettysave Limited}{Lagos, Nigeria}{}{
   \begin{itemize}
-    \item Assisted in developing server-based Node.js software by providing inputs and insights.
-    \item Improved peer review process by automating Pull Requests deployment and enhancing work collaboration between different stakeholders.
-    \item Increased customer retention by 27\% by implementing email marketing automation across user journey, using Sendgrid.
-    \item Collaborated together with the product and marketing team to implement product-led growth strategies like in-app reward systems, gamification and social features.
+    \item Built and maintained backend API endpoints in Node.js (Adonis.js) powering the savings and investment platform, including transaction processing and account management features.
+    \item Automated preview deployments on pull requests, reducing the peer review cycle and enabling non-engineering stakeholders to test changes before merge.
+    \item Increased customer retention by 27\% by implementing automated email sequences (onboarding, engagement, re-activation) via SendGrid integration across the user journey.
+    \item Collaborated with the product team to implement in-app reward systems and social features as part of a product-led growth strategy.
   \end{itemize}
 }
 
 \medskip
 
-\cvline{}{Tools: \emph{JavaScript, Node.js, Adonis.js, GraphQL, MySQL, Heroku.}}
+\cvline{}{Tools: \textit{JavaScript, Node.js, Adonis.js, GraphQL, MySQL, SendGrid, Heroku.}}
 
-\medskip
-
-\tlcventry{2020}{2020}{Fullstack Developer}{Nester Global Solution Services}{}{Lagos State, Nigeria}{
-  \begin{itemize}
-    \item Maintained, reviewed and developed the firm’s enterprise and web .
-    \item Involved with application management and monitoring.
-    \item Deployed solutions on Microsoft Azure and setting up cron jobs.
-  \end{itemize}
-}
+\tlcventry{2020}{2020}{Fullstack Developer}{Nester Global Solution Services}{Lagos, Nigeria}{}{Maintained and extended the firm's enterprise web application (Node.js, Vue.js, MongoDB), including feature development, code reviews, and Azure deployment management.}
 
 \medskip
 
 \cvline{}{Tools: \textit{JavaScript, Node.js, Vue.js, MongoDB, Microsoft Azure.}}
 
-\medskip
-
-\tlcventry{2019}{2019}{Backend Developer (Intern)}{DevCareers}{}{Lagos State, Nigeria}{Worked closely with a team of nine developers to build web applications for the organization. My responsibilities during this period was:
+\tlcventry{2019}{2019}{Backend Developer (Intern)}{DevCareers}{Lagos, Nigeria}{}{
   \begin{itemize}
-    \item Designed and configured a fully automated CI/CD lifecycle resulting in faster development time.
-    \item Implementing API endpoints for the Frontend team to work with.
+    \item Designed and configured a CI/CD pipeline (GitHub Actions) with automated testing and deployment, reducing manual deployment steps for the team.
+    \item Implemented REST API endpoints consumed by the frontend team for the organization's web platform.
   \end{itemize}
 }
 
@@ -107,13 +128,15 @@
 
 \cvline{}{Tools: \textit{JavaScript, Node.js, PostgreSQL, Heroku.}}
 
+\tlcventry{2018}{2019}{Software Developer (Intern)}{Andela Nigeria}{Lagos, Nigeria}{}{
+  \begin{itemize}
+    \item Built REST API endpoints for a travel agency web application as part of an Agile team of five engineers, using Node.js, Sequelize ORM, and PostgreSQL.
+  \end{itemize}
+}
+
 \medskip
 
-\tlcventry{2018}{2019}{Software Developer (Intern)}{Andela Nigeria}{}{Lagos State, Nigeria}{I was part of an AGILE team composed of a Product Owner, Project Manager, Technical Team Lead and five engineers tasked with building REST API endpoints for a travel agency web application using NodeJS, Sequelize, and PostgreSQL.}
-
-\medskip
-
-\cvline{}{Tools: \textit{JavaScript, Node.js, HTML/CSS, PostgreSQL, Heroku.}}
+\cvline{}{Tools: \textit{JavaScript, Node.js, Sequelize, PostgreSQL, Heroku.}}
 
 %  //////////////////////////////////////////////////////////////////////
 %  ------------------------ Skills Information --------------------------
@@ -123,28 +146,70 @@
 
 \medskip
 
-\cvitemwithcomment{Languages}{TypeScript, Python, \LaTeX, Ruby}{}
+% The timeline needs a narrow \hintscolumnwidth (see top of file), but that
+% column is shared with \cvitemwithcomment's label. Widen it locally here so
+% labels like "Cloud & Infra" don't collide with the content column.
+\begingroup
+\setlength{\hintscolumnwidth}{2.6cm}
+\recomputebodylengths
 
-\cvitemwithcomment{Tools}{Docker, CI/CD, IaCs (AWS, Azure, GCP, Heroku), SQL Databases, NoSQL Databases}{}
+\ifbackend
+  \cvitemwithcomment{Languages}{TypeScript, JavaScript (Node.js), Python, SQL}{}
+  \cvitemwithcomment{Frameworks}{NestJS, Express, Adonis.js, React (basic)}{}
+  \cvitemwithcomment{Databases}{PostgreSQL, MySQL, MongoDB, Redis}{}
+  \cvitemwithcomment{Cloud \& Infra}{AWS (Elastic Beanstalk, S3, RDS), Azure, Docker, Kubernetes, Proxmox}{}
+  \cvitemwithcomment{DevOps}{GitHub Actions, Terraform, CI/CD pipeline design, Linux administration}{}
+  \cvitemwithcomment{Architecture}{REST API design, GraphQL, database schema design, monorepo tooling}{}
+\fi
 
-\cvitemwithcomment{Architecture}{API Design (REST/GraphQL), Database Design, Event-Driven Systems, LLM Integrations}{}
+\ifplatform
+  \cvitemwithcomment{Cloud \& Infra}{AWS (Elastic Beanstalk, S3, RDS), Azure, Docker, Kubernetes, Proxmox, Coolify}{}
+  \cvitemwithcomment{DevOps}{GitHub Actions, Terraform, CI/CD pipeline design, Linux administration}{}
+  \cvitemwithcomment{Languages}{TypeScript, JavaScript (Node.js), Python, SQL, Bash}{}
+  \cvitemwithcomment{Databases}{PostgreSQL, MySQL, MongoDB, Redis}{}
+  \cvitemwithcomment{Frameworks}{NestJS, Express, Adonis.js}{}
+  \cvitemwithcomment{Architecture}{REST API design, container orchestration, infrastructure as code, backup automation}{}
+\fi
+
+\iffullstack
+  \cvitemwithcomment{Languages}{TypeScript, JavaScript, Python, SQL}{}
+  \cvitemwithcomment{Backend}{NestJS, Express, Adonis.js, Node.js}{}
+  \cvitemwithcomment{Frontend}{React, Vite, Retool}{}
+  \cvitemwithcomment{Databases}{PostgreSQL, MySQL, MongoDB, Redis}{}
+  \cvitemwithcomment{Cloud \& Infra}{AWS, Azure, Docker, GitHub Actions, Terraform}{}
+  \cvitemwithcomment{Architecture}{REST API design, GraphQL, database schema design, monorepo tooling}{}
+\fi
+\endgroup
+
+%  //////////////////////////////////////////////////////////////////////
+%  ------------------------ Selected Projects -----------------------------
+%  //////////////////////////////////////////////////////////////////////
+
+\section{Selected Projects}
+
+\cventry{2026}{Infra Stackdoc}{}{}{}{
+  Open-source tool for documenting and visualizing homelab infrastructure stacks. Built with TypeScript, React, and NestJS. Resolved cross-package TypeScript compilation issues in the monorepo by re-architecting root-level \texttt{tsconfig.json} paths and package aliases.
+  \newline{}\textit{github.com/thatkazuk1/infra-stackdoc}
+}
+
+\medskip
+
+\cventry{2026}{Homelab Infrastructure}{}{}{}{
+  Self-hosted production environment on Proxmox, Docker, and Kubernetes (Talos Linux), migrated from Azure to a self-hosted Coolify instance with zero-downtime GitHub Actions CI/CD. Automated daily backups (Backrest + Rclone) with offsite sync, and a VLAN-segmented network topology via OPNsense.
+}
 
 %  //////////////////////////////////////////////////////////////////////
 %  ------------------------ Miscellaneous Information --------------------------
 %  //////////////////////////////////////////////////////////////////////
 
-\section{Other Volunteer Experience}
+\section{Other Experience}
 
 \medskip
 
-\tlcventry{2025}{0}{Backend Engineer}{African Institute for Artificial Intelligence LBG}{Accra, Ghana}{}{The African Association for the Advancement of Artificial Intelligence (4AI) is a visionary organization dedicated to advancing AI knowledge and application across Africa.}
+\tlcventry{2022}{2024}{Mentor}{DevCareer}{Lagos, Nigeria}{}{Mentored junior developers in backend engineering, code review practices, and career development.}
 
 \medskip
 
-\tlcventry{2022}{2024}{Mentor}{DevCareer}{Lagos, Nigeria}{}{DevCareer is a Non-Profit organization that is focused on supporting upcoming developers with resources to excel into world class.}
-
-\medskip
-
-\tlcventry{2019}{2020}{Programming Tutor}{CodeLagos}{Lagos, Nigeria}{}{CodeLagos is an initiative of the Lagos State Ministry of Education aimed at making coding education accessible to Lagos State residents.}
+\tlcventry{2019}{2020}{Programming Tutor}{CodeLagos}{Lagos, Nigeria}{}{Taught coding fundamentals to Lagos residents as part of the Lagos State government's digital literacy initiative.}
 
 \end{document}

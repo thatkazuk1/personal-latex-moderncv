@@ -1,0 +1,46 @@
+name: Diff Preview
+
+on:
+  pull_request:
+    paths:
+      - "main.tex"
+
+jobs:
+  diff-preview:
+    runs-on: ubuntu-latest
+    # Best-effort: latexdiff's markup can conflict with itemize/list
+    # boundaries on large restructuring diffs and fail to compile cleanly.
+    # Never block the PR on this — see job-level continue-on-error.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.base_ref }} --depth=1
+
+      - name: Install latexdiff
+        run: sudo apt-get update && sudo apt-get install -y latexdiff
+
+      - name: Generate diff source
+        run: |
+          git show origin/${{ github.base_ref }}:main.tex > main-base.tex
+          latexdiff main-base.tex main.tex > main-diff.tex
+
+      - name: Compile diff PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main-diff.tex
+          compiler: pdflatex
+          args: -interaction=nonstopmode -file-line-error
+        continue-on-error: true
+
+      - name: Upload diff preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-diff-preview
+          path: main-diff.pdf
+          if-no-files-found: warn

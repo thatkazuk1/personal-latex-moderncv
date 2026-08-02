@@ -12,14 +12,63 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Compile LaTeX
+      - name: Install spell-check / PDF-inspection tools
+        run: sudo apt-get update && sudo apt-get install -y aspell poppler-utils
+
+      - name: Spell check
+        run: |
+          aspell --mode=tex --lang=en_US --personal=./.aspell.en.pws list < main.tex | sort -u > /tmp/misspelled.txt
+          if [ -s /tmp/misspelled.txt ]; then
+            echo "Possible misspellings found (not in .aspell.en.pws):"
+            cat /tmp/misspelled.txt
+            echo "If these are real words/names, add them to .aspell.en.pws."
+            exit 1
+          fi
+
+      - name: Compile backend variant (default)
         uses: xu-cheng/latex-action@v4
         with:
           root_file: main.tex
           compiler: pdflatex
 
-      - name: Rename PDF Output
-        run: mv main.pdf desmond_edem.pdf
+      - name: Rename backend PDF
+        run: |
+          mv main.pdf desmond_edem_backend.pdf
+          cp desmond_edem_backend.pdf desmond_edem.pdf
+
+      - name: Write platform variant source
+        run: printf '%s\n' '\def\variantplatform{}\input{main.tex}' > _build_platform.tex
+
+      - name: Compile platform variant
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: _build_platform.tex
+          compiler: pdflatex
+
+      - name: Rename platform PDF
+        run: mv _build_platform.pdf desmond_edem_platform.pdf
+
+      - name: Write fullstack variant source
+        run: printf '%s\n' '\def\variantfullstack{}\input{main.tex}' > _build_fullstack.tex
+
+      - name: Compile fullstack variant
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: _build_fullstack.tex
+          compiler: pdflatex
+
+      - name: Rename fullstack PDF
+        run: mv _build_fullstack.pdf desmond_edem_fullstack.pdf
+
+      - name: Enforce 2-page budget
+        run: |
+          chmod +x scripts/check-page-count.sh
+          ./scripts/check-page-count.sh desmond_edem_backend.pdf desmond_edem_platform.pdf desmond_edem_fullstack.pdf
+
+      - name: ATS text-extraction check
+        run: |
+          chmod +x scripts/ats-check.sh
+          ./scripts/ats-check.sh desmond_edem_backend.pdf desmond_edem_platform.pdf desmond_edem_fullstack.pdf
 
       - name: Get Current Date
         id: date
@@ -30,8 +79,17 @@ jobs:
         with:
           tag_name: latest
           name: CV Release - (${{ env.date }})
-          body: "Generated CV from the latest commit."
-          files: desmond_edem.pdf
+          body: |
+            Generated CV variants from the latest commit.
+
+            - `desmond_edem.pdf` (identical to `desmond_edem_backend.pdf`) — default download, Backend / API / Server Engineer
+            - `desmond_edem_platform.pdf` — Platform / DevOps / Infra Engineer
+            - `desmond_edem_fullstack.pdf` — Full-Stack Engineer (backend-heavy)
+          files: |
+            desmond_edem.pdf
+            desmond_edem_backend.pdf
+            desmond_edem_platform.pdf
+            desmond_edem_fullstack.pdf
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
