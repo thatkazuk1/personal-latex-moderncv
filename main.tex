@@ -54,7 +54,7 @@
 \quote{Backend engineer with 6+ years building APIs, database systems, and deployment pipelines in Node.js and TypeScript — from startup MVPs at STRV to platform services at the African Institute for AI.}
 \fi
 \ifplatform
-\quote{Backend and platform engineer with 6+ years in Node.js/TypeScript and hands-on infrastructure experience across STRV and the African Institute for AI, running a self-hosted homelab on Proxmox, Kubernetes, and Docker.}
+\quote{Backend and platform engineer with 6+ years in Node.js/TypeScript and hands-on infrastructure experience across STRV and the African Institute for AI, running a self-hosted homelab on Proxmox and Docker.}
 \fi
 \iffullstack
 \quote{Software engineer with 6+ years of full-stack experience in Node.js and TypeScript — from startup MVPs at STRV to platform services and internal tooling at the African Institute for AI.}
@@ -157,13 +157,13 @@
   \cvitemwithcomment{Languages}{TypeScript, JavaScript (Node.js), Python, SQL}{}
   \cvitemwithcomment{Frameworks}{NestJS, Express, Adonis.js, React (basic)}{}
   \cvitemwithcomment{Databases}{PostgreSQL, MySQL, MongoDB, Redis}{}
-  \cvitemwithcomment{Cloud \& Infra}{AWS (Elastic Beanstalk, S3, RDS), Azure, Docker, Kubernetes, Proxmox}{}
+  \cvitemwithcomment{Cloud \& Infra}{AWS (Elastic Beanstalk, S3, RDS), Azure, Docker, Proxmox}{}
   \cvitemwithcomment{DevOps}{GitHub Actions, Terraform, CI/CD pipeline design, Linux administration}{}
   \cvitemwithcomment{Architecture}{REST API design, GraphQL, database schema design, monorepo tooling}{}
 \fi
 
 \ifplatform
-  \cvitemwithcomment{Cloud \& Infra}{AWS (Elastic Beanstalk, S3, RDS), Azure, Docker, Kubernetes, Proxmox, Coolify}{}
+  \cvitemwithcomment{Cloud \& Infra}{AWS (Elastic Beanstalk, S3, RDS), Azure, Docker, Proxmox, Coolify}{}
   \cvitemwithcomment{DevOps}{GitHub Actions, Terraform, CI/CD pipeline design, Linux administration}{}
   \cvitemwithcomment{Languages}{TypeScript, JavaScript (Node.js), Python, SQL, Bash}{}
   \cvitemwithcomment{Databases}{PostgreSQL, MySQL, MongoDB, Redis}{}
@@ -187,15 +187,15 @@
 
 \section{Selected Projects}
 
-\cventry{2026}{Infra Stackdoc}{}{}{}{
-  Open-source tool for documenting and visualizing homelab infrastructure stacks. Built with TypeScript, React, and NestJS. Resolved cross-package TypeScript compilation issues in the monorepo by re-architecting root-level \texttt{tsconfig.json} paths and package aliases.
-  \newline{}\textit{github.com/thatkazuk1/infra-stackdoc}
+\cventry{2026}{Oriweave}{}{}{}{
+  Open-source tool that turns a YAML description of a homelab into a live, interactive topology diagram. Live in production at oriweave.dev (v1.0). Built with TypeScript, React, and NestJS/PostgreSQL in a pnpm monorepo with a pure-TypeScript layout engine, CI, release automation, and release-gated deploys.
+  \newline{}\textit{oriweave.dev \textperiodcentered{} github.com/oryweave/oriweave}
 }
 
 \medskip
 
 \cventry{2026}{Homelab Infrastructure}{}{}{}{
-  Self-hosted production environment on Proxmox, Docker, and Kubernetes (Talos Linux), migrated from Azure to a self-hosted Coolify instance with zero-downtime GitHub Actions CI/CD. Automated daily backups (Backrest + Rclone) with offsite sync, and a VLAN-segmented network topology via OPNsense.
+  Self-hosted production environment on Proxmox and Docker, migrated from Azure to a self-hosted Coolify instance with zero-downtime GitHub Actions CI/CD. Automated daily backups (Backrest + Rclone) with offsite sync, and a VLAN-segmented network topology via OPNsense.
 }
 
 %  //////////////////////////////////////////////////////////////////////
